@@ -27,3 +27,4 @@ FastAPI로 만든 커뮤니티 서비스 백엔드
 [노션 링크](https://www.notion.so/2-36806f054233803a8cdbf573efea95c2?source=copy_link)
 
 # 회고
+[회고 링크](https://github.com/100-hours-a-week/KTB4-Vicki-AI/blob/main/02/community-project/review.md)
