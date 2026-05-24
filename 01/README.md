@@ -42,6 +42,7 @@ puthon3 {gitmsg_프로젝트_경로}/main.py generate
 
 
 ### 프로젝트 구조
+```
 gitmsg/
 │
 ├── analyzer/
@@ -55,6 +56,7 @@ gitmsg/
 ├── main.py
 ├── requirements.txt
 └── README.md
+```
 
 ### 추후 개선방향
 - commit message 제목 자동 생성
