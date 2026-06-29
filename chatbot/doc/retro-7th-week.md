@@ -60,11 +60,11 @@ Prompt 생성 단계에서 History를 명시적으로 전달하는 구조로 변
 
 ## 4. 아쉬운 점
 
-아직 LangSmith Evaluation과 Gemini를 활용한 자동 평가 기능은 구현하지 못했다.
+아직 LangSmith Evaluation과 Gemini를 활용한 자동 평가 기능은 구현했으나 
 
-또한 Prompt Engineering과 Retrieval 성능을 체계적으로 비교,평가하는 과정도 부족했다.
+아직 평가 프롬프트가 부족해서 그런지 점수가 거의 1이 나왔다.
 
-향후에는 RAGAS 또는 LangSmith Evaluation을 적용하여 Retrieval과 Generation 품질을 정량적으로 평가해보고 싶다.
+추후 평가 로직을 개선해야겠다.
 
 
 

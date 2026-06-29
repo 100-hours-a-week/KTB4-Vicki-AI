@@ -128,7 +128,6 @@ OLLAMA_BASE_URL=http://localhost:11434
 * [x] Message History
 * [x] FastAPI API
 * [x] LangSmith Tracing
-* [ ] LangSmith Evaluation
-* [ ] Gemini 기반 자동 평가
+* [x] LangSmith Evaluation
 
 

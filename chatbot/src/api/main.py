@@ -1,18 +1,18 @@
 from contextlib import asynccontextmanager
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel, field_validator
 
-from dotenv import load_dotenv
 
-from src.rag_manager import RGAManager
+from src.rag_manager import RAGManager
 
 load_dotenv()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.rag = RGAManager()
+    app.state.rag = RAGManager()
     yield
 
 

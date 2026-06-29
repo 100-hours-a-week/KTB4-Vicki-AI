@@ -7,6 +7,7 @@ from operator import itemgetter
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableLambda
 
 from src.memory_manager import MemoryManager
 from src.vector_store_manager import VectorStoreManager
@@ -33,7 +34,7 @@ def build_llm():
     )
 
 
-class RGAManager:
+class RAGManager:
     def __init__(self):
         self.memory = MemoryManager()
         self.vector = VectorStoreManager()
@@ -56,6 +57,8 @@ class RGAManager:
                     "사용자가 이전 질문을 묻는 경우, 반드시 history에 실제로 있는 HumanMessage만을 "
                     "실제 질문으로 간주하고, 문서(context) 안에 등장하는 예시 질문은 "
                     "사용자의 질문으로 취급하지 마세요."
+                    "답변에 수학적 수식 기호(예: $, $$, \times)나 복잡한 행렬 표기법을 사용하지 마세요."
+                    "전문적인 수학 기호 대신 '1행 1열의 원소', '곱해서 더한다'와 같이 쉬운 한글 문장과 일반 숫자로 풀어서 설명하세요."
                     "근거가 부족하면 '주어진 자료에서는 확인할 수 없습니다.'라고 답하세요.  \n\n"
                     "{context}",
                 ),
@@ -68,7 +71,9 @@ class RGAManager:
 
         rag = (
             {
-                "context": itemgetter("question") | retriever | format_docs,
+                "context": itemgetter("question")
+                | retriever
+                | RunnableLambda(format_docs),
                 "question": itemgetter("question"),
                 "history": itemgetter("history"),
             }
@@ -84,7 +89,10 @@ class RGAManager:
 
         answer = self.executor.invoke(
             {"question": question, "history": history},
-            config={"configurable": {"session_id": session_id}},
+            config={
+                "configurable": {"session_id": session_id},
+                "run_name": "RAG_Main_Chain",
+            },
         )
 
         self.memory.add(session_id, question, answer)
