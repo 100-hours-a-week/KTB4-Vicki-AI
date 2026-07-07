@@ -70,6 +70,7 @@ flowchart TD
         F --> I{tools_condition}
         I --> G[ToolNode]
         G --> F
+        D --> G
         I --> H[END]
     end
 ```

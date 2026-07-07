@@ -3,7 +3,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langchain.tools import tool
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.graph import StateGraph, START, END, MessagesState
-from langchain.messages import SystemMessage, HumanMessage
+from langchain.messages import SystemMessage
 
 from src.vector_store_manager import VectorStoreManager
 
@@ -65,4 +65,4 @@ builder.add_edge(START, "agent")
 builder.add_conditional_edges("agent", tools_condition, ["tools", END])
 builder.add_edge("tools", "agent")
 
-search_agent = builder.compile()
+search_agent = builder.compile(checkpointer=InMemorySaver())
