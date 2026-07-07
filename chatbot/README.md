@@ -1,6 +1,6 @@
 # RAG Chatbot
 
-LangChain 기반의 Retrieval-Augmented Generation(RAG) 챗봇 프로젝트
+LangGraph 기반의 Retrieval-Augmented Generation(RAG) 챗봇 프로젝트
 
 대화 기록을 관리하여 멀티턴 대화를 지원, LangSmith를 이용한 체인 추적(Tracing) 환경을 구성
 
@@ -9,21 +9,19 @@ LangChain 기반의 Retrieval-Augmented Generation(RAG) 챗봇 프로젝트
 
 * 문서 임베딩 및 ChromaDB 인덱싱
 * Hybrid Retrieval
-
   * Dense Retrieval (Embedding)
   * Sparse Retrieval (BM25)
-* LangChain 기반 RAG Pipeline
+* LangGraph 기반 RAG
 * 대화 기록(Message History) 관리
 * FastAPI 기반 API 서버
 * LangSmith Tracing 지원
-* (예정) Gemini를 활용한 RAG 자동 평가
 
 
 # 사용 기술
 
 | 분야              | 기술                                    |
 | ---------------- | -------------------------------------- |
-| Framework        | LangChain                              |
+| Framework        | LangChain, Langgraph                   |
 | API              | FastAPI                                |
 | Vector DB        | ChromaDB                               |
 | Dense Embedding  | Ollama - bge-m3                         |
@@ -48,8 +46,7 @@ LangChain 기반의 Retrieval-Augmented Generation(RAG) 챗봇 프로젝트
 ├── src
 │   ├── api
 │   │   └── main.py           # FastAPI 서버
-│   ├── memory_manager.py     # 대화 기록 관리
-│   ├── rag_manager.py        # RAG 체인 생성 및 실행
+│   ├── graph.py              # langgraph agent, tool 코드
 │   └── vector_store_manager.py # Vector Store 생성 및 Retriever 관리
 ├── doc                       # 프로젝트 회고
 ├── pyproject.toml
@@ -61,7 +58,7 @@ LangChain 기반의 Retrieval-Augmented Generation(RAG) 챗봇 프로젝트
 
 ```mermaid
 flowchart TD
-    subgraph Indexing
+    subgraph Indexing 
         A[rag-data] --> B[Text Splitter]
         B --> C[Embedding]
         C --> D[(ChromaDB)]
@@ -69,14 +66,11 @@ flowchart TD
 
     subgraph retriever
         E[User Question]
-        E --> F[Ensemble Retriever]
-        D --> F
-        F --> H
-        E --> G[Message History]
-        G --> H[Prompt Template]
-        H --> I[LLM]
-        I --> J[Answer]
-        J --> K[Message History]
+        E --> F[search_agent]
+        F --> I{tools_condition}
+        I --> G[ToolNode]
+        G --> F
+        I --> H[END]
     end
 ```
 
@@ -117,17 +111,6 @@ OLLAMA_MODEL=gemma4:e2b-mlx
 OLLAMA_BASE_URL=http://localhost:11434
 ```
 
-# 현재 구현 상태
 
-* [x] 문서 인덱싱
-* [x] ChromaDB 구축
-* [x] Dense Retriever
-* [x] BM25 Retriever
-* [x] Hybrid Retrieval
-* [x] LangChain RAG Pipeline
-* [x] Message History
-* [x] FastAPI API
-* [x] LangSmith Tracing
-* [x] LangSmith Evaluation
 
 
