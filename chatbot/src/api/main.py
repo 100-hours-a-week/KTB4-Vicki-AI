@@ -4,15 +4,14 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel, field_validator
 
-
-from src.rag_manager import RAGManager
-
 load_dotenv()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.rag = RAGManager()
+    from src.graph import search_agent
+
+    app.state.graph = search_agent
     yield
 
 
@@ -42,6 +41,7 @@ def root():
 
 @app.post("/chat")
 def answer(request: ChatRequest):
-    rag = app.state.rag
-    answer = rag.ask(request.question, session_id="1111")
+    config = {"configurable": {"thread_id": "1111"}}
+    response = app.state.graph.invoke({"messages": request.question}, config=config)
+    answer = response["messages"][-1].content
     return ChatResponse(answer=answer)
